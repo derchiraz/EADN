@@ -1,3 +1,4 @@
+package com.example.controller;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Email;
