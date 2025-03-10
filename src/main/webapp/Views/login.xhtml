@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Connexion - EADN Timex</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    
+    <style>
+        :root {
+            --primary-color: #28a745;
+            --primary-hover: #218838;
+            --error-color: #dc3545;
+            --text-color: #333;
+            --background-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .subtext {
+            color: #666;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-hover);
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: block;
+            animation: shake 0.8s ease-in-out;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .requirements {
+            font-size: 0.75rem;
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .signup {
+            margin-top: 1rem;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="logo">
+        EADN <span>Timex</span>
+    </div>
+    <div class="subtext">
+        Entreprise d'Appui au Développement du Numérique
+    </div>
+
+    <div class="login-container">
+        <h2>Welcome !</h2>
+
+        <h:form id="loginForm">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <h:inputText id="email" 
+                             value="#{loginBean.email}"
+                             required="true"
+                             requiredMessage="L'email est requis"
+                             validatorMessage="Email professionnel invalide"
+                             styleClass="form-control">
+                    <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:company\.com|entreprise\.fr|gouv\.fr|edu\.fr)$"/>
+                </h:inputText>
+                <h:message for="email" styleClass="error-message"/>
+            </div>
+
+            <div class="input-group password-container">
+                <label for="password">Mot de passe</label>
+                <h:inputSecret id="password"
+                               value="#{loginBean.password}"
+                               required="true"
+                               requiredMessage="Le mot de passe est requis"
+                               styleClass="form-control">
+                    <f:validateLength minimum="8"/>
+                </h:inputSecret>
+                <span class="toggle-password" onclick="togglePasswordVisibility()">
+                    <i class="fas fa-eye"></i>
+                </span>
+                <h:message for="password" styleClass="error-message"/>
+            </div>
+
+            <div class="requirements">
+                Le mot de passe doit contenir au moins 8 caractères.
+            </div>
+
+            <h:commandButton value="LOG IN" 
+                           action="#{loginBean.login}"
+                           styleClass="btn-login"/>
+
+            <h:panelGroup rendered="#{loginBean.loginError}">
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Email ou mot de passe incorrect
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+        <div class="signup">
+            Pas encore de compte ? <a href="Inscription.xhtml">S'inscrire</a>
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordField = document.getElementById('loginForm:password');
+            var eyeIcon = document.querySelector('.toggle-password i');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</h:body>
+</html>
