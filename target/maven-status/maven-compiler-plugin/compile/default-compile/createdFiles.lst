@@ -1,0 +1,5 @@
+com\example\controller\LoginBean.class
+com\mycompany\eadntimex\JakartaRestConfiguration.class
+com\mycompany\eadntimex\resources\JakartaEE10Resource.class
+UserBean.class
+User.class

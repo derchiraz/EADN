@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Inscription</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/css/pikaday.css"/>
+
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px;
+            text-align: left;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .date-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .calendar-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            grid-column: span 2;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <h2>Inscription</h2>
+        <h:form id="signupForm">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="name">Nom <span style="color: red;">*</span></label>
+                    <h:inputText id="name" value="#{userBean.name}" required="true"
+                                 requiredMessage="Le nom est obligatoire" styleClass="form-control"/>
+                    <h:message for="name" styleClass="error-message"/>
+                </div>
+                <div class="input-group">
+                    <label for="title">Titre</label>
+                    <h:inputText id="title" value="#{userBean.title}" styleClass="form-control"/>
+                    <h:message for="title" styleClass="error-message"/>
+                </div>
+                <div class="input-group">
+                    <label for="service">Service <span style="color: red;">*</span></label>
+                    <h:inputText id="service" value="#{userBean.service}" required="true"
+                                 requiredMessage="Le service est obligatoire" styleClass="form-control"/>
+                    <h:message for="service" styleClass="error-message"/>
+                </div>
+                <div class="input-group">
+                    <label for="status">Statut</label>
+                    <h:inputText id="status" value="#{userBean.status}" styleClass="form-control"/>
+                    <h:message for="status" styleClass="error-message"/>
+                </div>
+                
+                <!-- Date avec Pikaday -->
+                <div class="input-group">
+                    <label for="statusDate">Historique Statut</label>
+                    <div class="date-group">
+                        <h:inputText id="statusDate" value="#{userBean.statusDate}"
+                                     styleClass="form-control" readonly="true">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                        <button type="button" class="calendar-btn" onclick="openCalendar()">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <h:message for="statusDate" styleClass="error-message"/>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email professionnel <span style="color: red;">*</span></label>
+                    <h:inputText id="email" value="#{userBean.email}" required="true"
+                                 requiredMessage="L'email professionnel est obligatoire"
+                                 validatorMessage="Veuillez entrer une adresse email valide"
+                                 styleClass="form-control">
+                        <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:company\.com|entreprise\.fr|gouv\.fr|edu\.fr)$"/>
+                    </h:inputText>
+                    <h:message for="email" styleClass="error-message"/>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mot de passe <span style="color: red;">*</span></label>
+                    <h:inputSecret id="password" value="#{userBean.password}" required="true"
+                                   requiredMessage="Mot de passe obligatoire"
+                                   styleClass="form-control">
+                        <f:validateLength minimum="8"/>
+                    </h:inputSecret>
+                    <h:message for="password" styleClass="error-message"/>
+                </div>
+                <h:commandButton value="S'inscrire" action="#{userBean.register}" styleClass="btn"/>
+            </div>
+        </h:form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/pikaday.js"></script>
+    <script>
+        function openCalendar() {
+            const input = document.getElementById('signupForm:statusDate');
+            new Pikaday({
+                field: input,
+                format: 'YYYY-MM-DD',
+                onSelect: function(date) {
+                    input.value = this.getMoment().format('YYYY-MM-DD');
+                }
+            }).show();
+        }
+    </script>
+</h:body>
+
+</html>
